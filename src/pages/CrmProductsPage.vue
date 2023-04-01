@@ -4,7 +4,7 @@
     <div class="tw-mb-4">
       <q-btn color="primary" @click="toogleCreate">Добавить</q-btn>
     </div>
-    <ProductList :items="sortedProducts">
+    <ProductList :items="sortedProducts" animation-name="list">
       <template #default="{ item }">
         <DialogWrapper #default="{ show, setValue }">
           <ProductItem :item="item">

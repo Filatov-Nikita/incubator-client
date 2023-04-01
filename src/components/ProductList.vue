@@ -7,7 +7,7 @@
       Не найдено товаров
     </div>
     <div class="tw-flex tw-flex-wrap -tw-mt-3 -tw-ml-3">
-      <TransitionGroup name="list">
+      <TransitionGroup :name="animationName ?? ''">
         <div
           class="tw-w-1/3 tw-pl-3 tw-pt-3 full-items"
           v-for="item in items"
@@ -23,7 +23,7 @@
 <script setup lang="ts">
   import type { Product } from 'src/types/products';
 
-  defineProps<{ items: Product[] }>();
+  defineProps<{ items: Product[], animationName?: string }>();
 </script>
 <style>
 .full-items > .q-card {

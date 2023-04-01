@@ -48,12 +48,12 @@
   }
 
   function add() {
-    cartStore.add({ id: props.item.id, count: form.count, price: props.item.price });
+    cartStore.add({ id: props.item.id, count: form.count, price: props.item.price, name: props.item.name });
     Notify.create({ message: 'Добавлено успешно', type: 'positive' });
     emit('update:modelValue', false);
   }
 
   function reset() {
-    form.count = 1;
+    form.count = 0;
   }
 </script>

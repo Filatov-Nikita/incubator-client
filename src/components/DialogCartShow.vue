@@ -17,7 +17,7 @@
         </div>
         <div class="tw-text-right">
           <q-btn class="tw-mr-2" color="negative" label="Отмена" @click="close"/>
-          <q-btn color="positive" label="Завершить" @click="createOrder"/>
+          <q-btn :disabled="cartStore.products.length === 0" color="positive" label="Завершить" @click="createOrder"/>
         </div>
       </q-page-sticky>
     </q-card>

@@ -115,6 +115,7 @@
   }
 
   function resetForm() {
+    tags.value = [];
     Object.assign(form, {
       name: '',
       price: '',
