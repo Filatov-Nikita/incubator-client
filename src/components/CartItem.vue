@@ -4,17 +4,17 @@
     <div class="tw-flex tw-w-full">
       <div>
         <div class="tw-text-lg tw-font-semibold tw-mb-1">{{ item.name }}</div>
-        <div class="tw-mb-1">Цена за шт: {{ item.price }} руб.</div>
+        <div class="tw-mb-1">Цена за шт: {{ $price(item.price) }}</div>
         <div class="tw-space-x-1 -tw-ml-2">
           <q-btn size="md" round flat color="negative" label="-" @click="changeCount(item.count - 1)"/>
-          <input class="tw-w-20 tw-text-center tw-border tw-border-gray-300 tw-rounded-md" type="text" :value="item.count" @change="onInput($event)">
+          <input class="cart-count tw-w-20 tw-text-center tw-border tw-border-gray-300 tw-rounded-md" type="number" :value="item.count" @change="onInput($event)">
           <q-btn size="md" round flat color="positive" label="+" @click="changeCount(item.count + 1)" />
         </div>
       </div>
       <q-space />
-      <div class="tw-self-end tw-flex">
+      <div class="tw-self-end tw-flex tw-text-base">
         <div class="tw-font-medium">Итого:</div>
-        <div class="tw-font-medium tw-w-24 tw-text-right">{{ total }} руб.</div>
+        <div class="tw-font-medium tw-w-[100px] tw-text-right">{{ $price(total) }}</div>
       </div>
     </div>
   </q-item>
@@ -32,10 +32,24 @@
 
   function onInput(event: Event) {
     const target = event.target as HTMLInputElement;
-    changeCount(+target.value);
+    const count = changeCount(+target.value);
+    target.value = count.toString();
   }
 
   function changeCount(count: number) {
-    cartStore.update(props.item.id, { count: Math.max(1, count) });
+    count = Math.max(count, 1)
+    cartStore.update(props.item.id, { count });
+    return count;
   }
 </script>
+<style>
+  .cart-count::-webkit-outer-spin-button,
+  .cart-count::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+  }
+
+  .cart-count[type=number]{
+    -moz-appearance: textfield;
+  }
+</style>

@@ -2,7 +2,7 @@
   <q-page-sticky class="tw-w-full tw-bg-white" position="bottom-right" :offset="[0, 0]">
     <div class="tw-w-screen tw-pl-8 tw-flex tw-items-center tw-justify-between tw-p-2 tw-border-t tw-border-gray-200">
       <div class="tw-font-semibold">
-        Итого: {{ cartStore.totalSum }} руб.
+        Итого: {{ $price(cartStore.totalSum) }}
       </div>
       <div>
         <button
