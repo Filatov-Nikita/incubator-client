@@ -43,7 +43,7 @@
   import CatItem from 'src/components/CatItem.vue';
   import { useProductsStore } from 'src/stores/products';
   import { useCategoriesStore } from 'src/stores/categories';
-  import { computed, ref, watch, reactive } from 'vue';
+  import { computed, watch, reactive } from 'vue';
   import useProducts from 'src/composables/products';
   import { ProductFilter } from 'src/types/products';
   import { useTagsStore } from 'src/stores/tags';
@@ -57,6 +57,7 @@
       delete filter.categoryId;
     } else {
       filter.categoryId = catId;
+      filter.tags = [];
     }
   }
 
@@ -80,5 +81,5 @@
 
   watch(filter, () => {
     getProducts(filter);
-  }, { immediate: true })
+  }, { immediate: true });
 </script>
