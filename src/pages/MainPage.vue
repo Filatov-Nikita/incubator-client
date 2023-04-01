@@ -1,16 +1,16 @@
 <template>
-  <q-page class="tw-px-4 tw-pt-4 tw-py-8">
+  <q-page class="tw-px-4 tw-pt-4 tw-py-8 tw-pb-[80px]">
     <CatList class="tw-mb-4" :items="catsStore.items ?? []">
       <template #default="{ item }">
         <CatItem :item="item" :active="item.id === filter.categoryId" @click="_e => setCat(item.id)" />
       </template>
     </CatList>
 
-    <div class="-tw-ml-1 tw-mb-4 tw-min-h-[40px]">
+    <div class="-tw-ml-3 tw-mb-4 tw-min-h-[40px]">
       <q-btn
         rounded
         size="8px"
-        class="tw-text-white tw-cursor-pointer tw-px-2 tw-ml-1"
+        class="tw-text-white tw-cursor-pointer tw-px-4 tw-py-[5px] tw-ml-3"
         :class="[tag.color, { 'tw-opacity-50': filter.tags?.includes(tag.id) ?? false }]"
         v-for="tag in tags" :key="tag.id"
         @click="_e => setTag(tag)"
