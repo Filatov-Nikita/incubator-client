@@ -1,0 +1,28 @@
+/* app global css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --q-primary: #07aa00;
+  --q-secondary: #111553;
+}
+
+.purple {
+  @apply tw-bg-purple-700;
+}
+.orange {
+  @apply tw-bg-orange-700;
+}
+.blue {
+  @apply tw-bg-blue-700;
+}
+.red {
+  @apply tw-bg-red-700;
+}
+.green {
+  @apply tw-bg-green-700;
+}
+.black {
+  @apply tw-bg-black;
+}
