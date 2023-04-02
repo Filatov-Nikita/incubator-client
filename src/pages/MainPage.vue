@@ -6,17 +6,23 @@
       </template>
     </CatList>
 
-    <div class="-tw-ml-3 tw-mb-4 tw-min-h-[40px]">
-      <q-btn
-        rounded
-        size="8px"
-        class="tw-text-white tw-cursor-pointer tw-px-4 tw-py-[5px] tw-ml-3"
-        :class="[tag.color, { 'tw-opacity-50': filter.tags?.includes(tag.id) ?? false }]"
-        v-for="tag in tags" :key="tag.id"
-        @click="_e => setTag(tag)"
-      >
-        {{ tag.name}}
-      </q-btn>
+    <div class="tw-mb-4">
+      <div class="-tw-ml-3 tw-min-h-[30px]">
+        <q-btn
+          rounded
+          size="8px"
+          class="tw-text-white tw-cursor-pointer tw-px-4 tw-py-[5px] tw-ml-3"
+          :class="[tag.color, { 'tw-opacity-30': filter.tags?.includes(tag.id) ?? false }]"
+          v-for="tag in tags" :key="tag.id"
+          @click="_e => setTag(tag)"
+        >
+          {{ tag.name}}
+        </q-btn>
+      </div>
+
+      <div class=" tw-min-h-[25px]">
+        <q-btn v-show="filter.tags?.length" size="sm" padding="4px" flat @click="filter.tags = []" icon-right="close">сброс</q-btn>
+      </div>
     </div>
 
     <ProductList :items="products ?? []" #default="{ item }">
@@ -57,8 +63,9 @@
       delete filter.categoryId;
     } else {
       filter.categoryId = catId;
-      filter.tags = [];
     }
+
+    filter.tags = [];
   }
 
   function setTag(tag: Tag) {
@@ -73,11 +80,15 @@
   const tagsStore = useTagsStore();
   const { products, getProducts } = useProducts();
 
-  const tags = computed(() => {
+  const tagsVisible = computed(() => {
     if(tagsStore.items === null) return [];
-    if(!filter.categoryId) return tagsStore.items;
-    return tagsStore.items.filter(tag => tag.categoryId === filter.categoryId);
-  })
+    return tagsStore.items.filter(tag => tag.visible);
+  });
+
+  const tags = computed(() => {
+    if(!filter.categoryId) return tagsVisible.value;
+    return tagsVisible.value.filter(tag => tag.categoryId === filter.categoryId && tag.visible);
+  });
 
   watch(filter, () => {
     getProducts(filter);
