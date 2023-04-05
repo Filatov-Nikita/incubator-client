@@ -24,6 +24,23 @@
 
           <q-item-section>{{ item.label }}</q-item-section>
         </q-item>
+        <q-expansion-item icon="description" label="Отчеты" default-opened :content-inset-level="1">
+          <q-list>
+            <q-item
+              clickable
+              v-ripple
+            >
+              <q-item-section>Заказы</q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              v-ripple
+              :to="{ name: 'crm.reports.products' }"
+            >
+              <q-item-section>Продукты</q-item-section>
+            </q-item>
+          </q-list>
+        </q-expansion-item>
       </q-list>
     </q-drawer>
 
@@ -54,11 +71,6 @@
       icon: 'category',
       label: 'Категории',
       to: { name: 'crm.categories' }
-    },
-    {
-      icon: 'description',
-      label: 'Отчеты',
-      to: { name: 'crm.reports' }
     },
   ]
 

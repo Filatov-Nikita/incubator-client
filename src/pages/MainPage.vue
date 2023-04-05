@@ -1,6 +1,6 @@
 <template>
   <q-page class="tw-px-4 tw-pt-4 tw-py-8 tw-pb-[80px]">
-    <CatList class="tw-mb-4" :items="catsStore.items ?? []">
+    <CatList class="tw-mb-3" :items="catsStore.items ?? []">
       <template #default="{ item }">
         <CatItem :item="item" :active="item.id === filter.categoryId" @click="_e => setCat(item.id)" />
       </template>
