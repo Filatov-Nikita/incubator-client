@@ -28,7 +28,8 @@
     return `${firstRowIndex}-${endRowIndex} из ${totalRowsNumber}`
   }
 
-  const papOpts = [20, 40, 60, 80, 100, 'Все']
+  // const papOpts = [20, 40, 60, 80, 100, 'Все'];
+  const papOpts = [0];
 
   const columns = [
     {
