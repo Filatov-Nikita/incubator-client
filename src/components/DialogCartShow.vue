@@ -6,12 +6,12 @@
     :modelValue="modelValue"
     @update:modelValue="$emit('update:modelValue', $event)"
   >
-    <q-card class="tw-bg-gray-200">
+    <q-card class="tw-bg-gray-200 tw-pb-[130px]">
       <q-card-section>
         <div class="tw-text-3xl tw-font-semibold tw-mb-4">Заказ</div>
         <CartList class="tw-mb-8" :items="cartStore.products" />
       </q-card-section>
-      <q-page-sticky position="bottom-right" :offset="[30, 20]">
+      <q-page-sticky class="tw-bg-gray-200 tw-p-4 tw-rounded-md cart-sticky" position="bottom-right" :offset="[18, 20]">
         <div class="tw-text-xl tw-font-semibold tw-text-right tw-mb-6 tw-w-80">
           Общая сумма: {{ $price(cartStore.totalSum) }}
         </div>
@@ -59,3 +59,9 @@
     emit('update:modelValue', false);
   }
 </script>
+<style>
+.cart-sticky {
+  border-radius: 6px !important;
+  @apply tw-bg-yellow-100 tw-shadow-sm tw-shadow-gray-500 !important;
+}
+</style>
