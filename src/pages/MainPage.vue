@@ -11,7 +11,7 @@
         <q-btn
           rounded
           size="8px"
-          class="tw-text-white tw-cursor-pointer tw-px-4 tw-py-[5px] tw-ml-3"
+          class="tw-text-white tw-cursor-pointer tw-px-4 tw-py-[5px] tw-ml-3 tw-touch-manipulation"
           :class="[tag.color, { 'tw-opacity-30': filter.tags?.includes(tag.id) ?? false }]"
           v-for="tag in tags" :key="tag.id"
           @click="_e => setTag(tag)"

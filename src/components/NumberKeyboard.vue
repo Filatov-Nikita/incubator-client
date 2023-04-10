@@ -55,6 +55,7 @@
   text-align: center;
   background: theme('colors.gray.200');
   order: 1;
+  touch-action: manipulation;
 }
 
 .zero {

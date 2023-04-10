@@ -6,9 +6,9 @@
         <div class="tw-text-lg tw-font-semibold tw-mb-1">{{ item.name }}</div>
         <div class="tw-mb-1">Цена за шт: {{ $price(item.price) }}</div>
         <div class="tw-space-x-1 -tw-ml-2">
-          <q-btn size="md" round flat color="negative" label="-" @click="changeCount(item.count - 1)"/>
+          <q-btn class="tw-touch-manipulation" size="md" round flat color="negative" label="-" @click="changeCount(item.count - 1)"/>
           <input class="cart-count tw-w-20 tw-text-center tw-border tw-border-gray-300 tw-rounded-md" type="number" :value="item.count" @change="onInput($event)">
-          <q-btn size="md" round flat color="positive" label="+" @click="changeCount(item.count + 1)" />
+          <q-btn class="tw-touch-manipulation" size="md" round flat color="positive" label="+" @click="changeCount(item.count + 1)" />
         </div>
       </div>
       <q-space />

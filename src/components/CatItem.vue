@@ -1,5 +1,5 @@
 <template>
-  <q-btn size="sm" rounded :color="active ? 'orange-10' : 'orange-5'" :label="item.name" unelevated />
+  <q-btn class="tw-touch-manipulation" size="sm" rounded :color="active ? 'orange-10' : 'orange-5'" :label="item.name" unelevated />
 </template>
 
 <script setup lang="ts">
