@@ -14,6 +14,7 @@
       <div class="tw-flex tw-justify-center tw-mb-4 tw-space-x-1">
         <q-btn rounded color="orange-4" text-color="white" @click="set(5)">5</q-btn>
         <q-btn rounded color="orange-4" text-color="white" @click="set(10)">10</q-btn>
+        <q-btn rounded color="orange-6" text-color="white" @click="set(30)">30</q-btn>
         <q-btn rounded color="orange-9" text-color="white" @click="set(50)">50</q-btn>
         <q-btn rounded color="orange-10" text-color="white" @click="set(100)">100</q-btn>
       </div>

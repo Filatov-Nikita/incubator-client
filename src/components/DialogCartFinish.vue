@@ -19,6 +19,7 @@
           <q-input class="tw-mb-4" v-model.number="cash" type="number" label="Наличные"></q-input>
           <div class="tw-mb-6 tw-space-y-2 tw-text-lg">
             <p>Общая сумма заказа: {{ $price(total) }}</p>
+            <NumberKeyboard @press="onPress" @clear="onClear" @del="onDel" />
             <p>Наличные: {{ $price(cash) }}</p>
             <p class="tw-text-xl tw-font-medium">Сдача: {{ $price(money) }}</p>
           </div>
@@ -30,6 +31,7 @@
 </template>
 
 <script setup lang="ts">
+  import NumberKeyboard from 'src/components/NumberKeyboard.vue';
   import { computed } from '@vue/reactivity';
   import { ref } from 'vue';
 
@@ -56,5 +58,19 @@
   function finish() {
     emit('finish');
     emit('update:modelValue', false);
+  }
+
+  function onPress(num: number) {
+    const newNum = cash.value.toString() + num.toString();
+    cash.value = +newNum;
+  }
+
+  function onClear() {
+    cash.value = 0;
+  }
+
+  function onDel() {
+    const newNum = cash.value.toString().slice(0, -1);
+    cash.value = +newNum;
   }
 </script>
