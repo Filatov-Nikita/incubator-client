@@ -1,22 +1,18 @@
 <template>
-  <q-page class="tw-p-4 tw-pt-6">
+  <q-page class="tw-p-4 tw-pt-6 tw-pb-10">
     <h1 class="tw-text-2xl tw-font-semibold tw-mb-4">Отчет продаж по товарам</h1>
 
-    <section class="q-mb-sm">
-      <q-card class="my-card">
-        <q-card-section @click="showFilter = !showFilter" class="bg-primary text-white q-py-sm" style="cursor:pointer">
+    <section class="tw-mb-8">
+      <q-card>
+        <q-card-section class="bg-primary text-white q-py-sm">
           <div class="flex justify-between items-center">
             <div class="text-md text-weight-bold">Фильтр</div>
-            <q-space/>
-            <button v-ripple class="filterBtn">
-              <q-icon color="dark" :name="showFilter ? 'expand_less' : 'expand_more'" />
-            </button>
           </div>
         </q-card-section>
 
         <q-separator />
         <q-slide-transition>
-          <q-card-section v-if="showFilter">
+          <q-card-section>
             <div class="row q-col-gutter-md q-mb-md">
               <div class="col">
                 <q-input
@@ -39,7 +35,7 @@
                   filled
                   v-model="cat"
                   :options="catsStore.items ?? []"
-                  label="Тип инструмента"
+                  label="Категория"
                   option-label="name"
                   option-value="id"
                 />
@@ -59,7 +55,7 @@
       </q-card>
     </section>
 
-    <div class="tw-mb-4 tw-font-medium tw-text-base" v-if="data">Выручка: {{ $price(data?.total) }}</div>
+    <div class="tw-mb-4 tw-font-bold tw-text-xl" v-if="data">Выручка: {{ $price(data?.total) }}</div>
     <q-table
       v-if="data"
       :columns="columns"
@@ -67,7 +63,6 @@
       rows-per-page-label="Показывать на странице"
       :pagination-label="pagLabel"
       :rows-per-page-options="papOpts"
-      :row-key="rowKey"
       hide-pagination
     >
     </q-table>
@@ -128,8 +123,6 @@
     },
   ];
 
-  const rowKey = (row: any) => row.product.name
-
   async function showData() {
     data.value = await store.showProductsSold({...filter, categoryId: cat.value?.id.toString() || ''});
   }
@@ -151,17 +144,3 @@
 
   showData();
 </script>
-<style scoped>
-.filterBtn {
-  position: relative;
-  background: white;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 30px;
-  height: 30px;
-  border: 0;
-  cursor: pointer;
-}
-</style>
