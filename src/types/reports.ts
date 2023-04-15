@@ -7,3 +7,8 @@ export interface ProductItem {
     name: string
   }
 }
+
+export interface Report {
+  products: ProductItem[],
+  total: number
+}
