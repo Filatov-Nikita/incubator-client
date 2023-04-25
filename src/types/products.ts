@@ -15,7 +15,25 @@ export type ProductFilter = {
   categoryId?: number,
   visible?: boolean,
   withTags?: '1',
-  tags?: number[]
+  tags?: number[],
+}
+
+export type LazyLoadFilter = {
+  limit?: number,
+  offset?: number
+}
+
+export type ProductLazyFilter = ProductFilter & LazyLoadFilter;
+
+export interface MetaResponse {
+  total: number,
+  limit?: number,
+  offset?: number
+}
+
+export interface ProductsResponse {
+  data: Product[],
+  meta: MetaResponse
 }
 
 export type ProductBody = Omit<Product, 'id' | 'img' | 'tags'> & { img: File | null };

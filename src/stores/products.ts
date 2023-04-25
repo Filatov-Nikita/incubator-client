@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import * as ProductsApi from 'src/api/products';
-import type { Product, ProductBody, ProductFilter } from 'src/types/products';
+import type { Product, ProductBody, ProductLazyFilter } from 'src/types/products';
 import { Tag } from 'src/types/tags';
 
 interface State {
@@ -21,7 +21,7 @@ export const useProductsStore = defineStore('productsStore', {
     }
   },
   actions: {
-    async list(filter: ProductFilter = {}) {
+    async list(filter: ProductLazyFilter = {}) {
       const products = await ProductsApi.list(filter);
       return products;
     },

@@ -1,6 +1,6 @@
 <template>
   <q-card :class="{ 'tw-opacity-50': item.visible === false }">
-    <q-img height="100px" :src="$imgPath(item.img, '/images/preview.jpg')" />
+    <q-img height="100px" loading="lazy" :src="$imgPath(item.img, '/images/preview.jpg')" />
     <q-card-section>
       <div class="text-h6 tw-leading-tight">{{ item.name }}</div>
       <div class="text-subtitle2">{{ $price(item.price) }}</div>

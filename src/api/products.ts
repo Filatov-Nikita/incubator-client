@@ -1,7 +1,7 @@
 import { api } from './index';
-import type { Product, ProductBody, ProductFilter } from 'src/types/products';
+import type { Product, ProductBody, ProductLazyFilter, ProductsResponse } from 'src/types/products';
 
-export function list(filter: ProductFilter = {}) {
+export function list(filter: ProductLazyFilter = {}) {
   const searchParams = new URLSearchParams();
 
   if(filter.tags) {
@@ -11,10 +11,12 @@ export function list(filter: ProductFilter = {}) {
   }
 
   if(filter.categoryId) searchParams.append('categoryId', filter.categoryId.toString());
+  if(filter.limit) searchParams.append('limit', filter.limit.toString());
+  if(filter.offset) searchParams.append('offset', filter.offset.toString());
   if(filter.visible) searchParams.append('visible', filter.visible ? '1' : '0');
   if(filter.withTags) searchParams.append('withTags', '');
 
-  return api.get('products', { searchParams }).json<Product[]>();
+  return api.get('products', { searchParams }).json<ProductsResponse>();
 }
 
 export function show(id: number) {

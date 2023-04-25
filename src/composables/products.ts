@@ -8,20 +8,8 @@ export default () => {
   const products = ref<Product[] | null>(null);
   const loading = ref(false);
   const creating = ref(false);
-  const updating = ref(false);
 
   const productsStore = useProductsStore();
-
-  async function getProducts(filter: ProductFilter = {}) {
-    try {
-      loading.value = true;
-      products.value = await productsStore.list(filter);
-    } catch(e) {
-      console.log(e);
-    } finally {
-      loading.value = false;
-    }
-  }
 
   function getItem (itemId: number) {
     if(products.value === null) return null;
@@ -87,8 +75,6 @@ export default () => {
 
   async function update(id: number, body: Partial<ProductBody>, onSuccess = (p: Product) => {}) {
     try {
-      updating.value = true;
-
       const newProduct = await productsStore.update(id, body);
 
       const product = updateLocal(id, newProduct);
@@ -100,8 +86,6 @@ export default () => {
     } catch(e) {
       console.log(e);
       Notify.create({ type: 'negative', message: 'Не удалось обновить продукт' });
-    } finally {
-      updating.value = false;
     }
   }
 
@@ -109,8 +93,6 @@ export default () => {
     products,
     loading,
     creating,
-    updating,
-    getProducts,
     create,
     update,
     updateLocal,
