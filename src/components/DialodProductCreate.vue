@@ -50,7 +50,7 @@
       name: form.name!,
       price: +form.price,
       description: form.description,
-      img: form.img,
+      img: form.img ?? form.imgUrl,
       categoryId: form.category?.id ?? null,
       visible: form.visible
     };

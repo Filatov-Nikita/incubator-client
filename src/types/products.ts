@@ -36,4 +36,4 @@ export interface ProductsResponse {
   meta: MetaResponse
 }
 
-export type ProductBody = Omit<Product, 'id' | 'img' | 'tags'> & { img: File | null };
+export type ProductBody = Omit<Product, 'id' | 'img' | 'tags'> & { img: string | File | null };

@@ -58,7 +58,8 @@
       price: item.price.toString(),
       description: item.description ?? '',
       category: item.categoryId ? catsStore.getItem(item.categoryId) : null,
-      tags: item.tags
+      tags: item.tags,
+      imgUrl: item.img
     }
   });
 
@@ -66,7 +67,7 @@
     const body = {
       price: +form.price,
       description: form.description,
-      img: form.img,
+      img: form.img ?? form.imgUrl,
       categoryId: form.category?.id ?? null,
     };
 

@@ -49,6 +49,11 @@
         <q-icon name="attach_file" />
       </template>
     </q-file>
+    <q-input
+      v-model="form.imgUrl"
+      label="Ссылка на изображение"
+      hide-bottom-space
+    />
     <div class="tw-pt-4">
       <q-btn type="submit" color="primary" :label="submitLabel" :loading="loading" />
     </div>
@@ -84,7 +89,8 @@
     img: File | null,
     category: Category | null,
     visible: boolean,
-    tags: Tag[]
+    tags: Tag[],
+    imgUrl: string | null
   }
 
   function initForm(): Form {
@@ -96,6 +102,7 @@
       category: null,
       visible: true,
       tags: [],
+      imgUrl: ''
     }, props.initialValues ?? {})
   }
 
