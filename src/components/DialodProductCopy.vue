@@ -5,19 +5,15 @@
     @beforeHide="formRef?.resetForm"
   >
     <q-card class="tw-w-full tw-p-4">
-      <div class="tw-text-lg tw-font-semibold tw-mb-4">{{ item.name }}</div>
+      <div class="tw-text-lg tw-font-semibold tw-mb-4">Добавить товар</div>
       <FormProduct
         ref="formRef"
-        hiddenName
         :initialValues="initialValues"
         :categories="categories"
         :tags="tags"
+        submitLabel="Сохранить"
         :loading="loading"
-        submitLabel="Обновить"
         @submit="submit"
-        @add:tag="addTags"
-        @remove:tag="removeTag"
-        @clear:tag="clearTags"
       />
     </q-card>
   </q-dialog>
@@ -41,9 +37,7 @@
 
   const emit = defineEmits<{
     (event: 'update:modelValue', value: boolean): void,
-    (event: 'update', product: Partial<ProductBody>): void,
-    (event: 'add:tags', tag: Tag[]): void,
-    (event: 'remove:tags', tag: Tag[]): void,
+    (event: 'create', product: ProductBody, tags: Tag[]): void,
   }>();
 
   const catsStore = useCategoriesStore();
@@ -55,6 +49,7 @@
   const initialValues = computed(() => {
     const item = props.item;
     return {
+      name: item.name,
       price: item.price.toString(),
       description: item.description ?? '',
       category: item.categoryId ? catsStore.getItem(item.categoryId) : null,
@@ -62,26 +57,16 @@
     }
   });
 
-  async function submit(form: Form) {
-    const body = {
-      price: +form.price,
-      description: form.description,
-      img: form.img,
-      categoryId: form.category?.id ?? null,
-    };
+function submit(form: Form) {
+  const body = {
+    name: form.name!,
+    price: +form.price,
+    description: form.description,
+    img: form.img,
+    categoryId: form.category?.id ?? null,
+    visible: form.visible
+  };
 
-    emit('update', body);
-  }
-
-  function addTags(tag: Tag) {
-    emit('add:tags', [ tag ]);
-  }
-
-  function removeTag(tag: Tag) {
-    emit('remove:tags', [ tag ]);
-  }
-
-  function clearTags(tags: Tag[]) {
-    emit('remove:tags', tags);
-  }
+  emit('create', body, form.tags);
+}
 </script>

@@ -10,6 +10,7 @@
         :update="update"
         :addTags="addTags"
         :removeTags="removeTags"
+        :create="create"
       />
     </ProductList>
     <DialodProductCreate
@@ -32,7 +33,17 @@
 
   const showCreate = ref(false);
 
-  const { loadMore, products, create, creating, update, updateLocal, attachTags, dettachTags } = useProductsPags({ limit: 18 });
+  const {
+    products,
+    creating,
+    loadMore,
+    create,
+    update,
+    updateLocal,
+    attachTags,
+    dettachTags
+  } = useProductsPags({ limit: 18 });
+
   useInfiniteLoading('#pag', () => loadMore({ withTags: '1' }));
 
   function toogleCreate() {
