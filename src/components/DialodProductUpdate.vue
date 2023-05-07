@@ -2,47 +2,22 @@
   <q-dialog
     :modelValue="modelValue"
     @update:modelValue="value => $emit('update:modelValue', value)"
-    @beforeHide="resetForm"
+    @beforeHide="formRef?.resetForm"
   >
     <q-card class="tw-w-full tw-p-4">
       <div class="tw-text-lg tw-font-semibold tw-mb-4">{{ item.name }}</div>
-      <q-form class="tw-space-y-2" @submit="submit">
-        <q-input v-model="form.price" label="Цена" type="number" :rules="rules.price" hide-bottom-space />
-        <q-input v-model="form.description" label="Описание (необязательно)" hide-bottom-space />
-        <q-select
-          v-model="form.category"
-          label="Категория"
-          :options="catsStore.items ?? []"
-          optionLabel="name"
-          optionValue="id"
-          hide-bottom-space
-        />
-        <q-select
-          v-model="tags"
-          use-chips
-          use-input
-          label="Теги"
-          :options="tagsOpts"
-          option-label="name"
-          option-key="id"
-          clearable
-          multiple
-          @filter="filterFn"
-          hide-bottom-space
-          @add="({ value }) => addTags([ value as Tag ])"
-          @remove="({ value }) => removeTags([ value as Tag ])"
-          @clear="(tags) => removeTags(tags as Tag[])"
-        >
-        </q-select>
-        <q-file v-model="form.img" label="Изображение">
-          <template v-slot:prepend>
-            <q-icon name="attach_file" />
-          </template>
-        </q-file>
-        <div class="tw-pt-4">
-          <q-btn type="submit" color="primary" label="Обновить" :loading="loading" />
-        </div>
-      </q-form>
+      <FormProduct
+        ref="formRef"
+        hiddenName
+        :initialValues="initialValues"
+        :categories="categories"
+        :tags="tags"
+        submitLabel="Обновить"
+        @submit="submit"
+        @add:tag="addTags"
+        @remove:tag="removeTag"
+        @clear:tag="clearTags"
+      />
     </q-card>
   </q-dialog>
 </template>
@@ -50,15 +25,18 @@
 <script setup lang="ts">
   import type { ProductBody, Product } from 'src/types/products';
   import type { Tag } from 'src/types/tags';
-  import { reactive, ref } from 'vue';
+  import { ref, computed } from 'vue';
   import { useCategoriesStore } from 'src/stores/categories';
   import { useTagsStore } from 'src/stores/tags';
+  import FormProduct, { type Form } from './FormProduct.vue';
 
   const props = defineProps<{
     modelValue: boolean,
     loading: boolean,
     item: Product
   }>();
+
+  const formRef = ref<InstanceType<typeof FormProduct> | null>(null);
 
   const emit = defineEmits<{
     (event: 'update:modelValue', value: boolean): void,
@@ -70,32 +48,20 @@
   const catsStore = useCategoriesStore();
   const tagsStore = useTagsStore();
 
-  const tags = ref<Tag[]>(props.item.tags);
-  const tagsOpts = ref<Tag[]>();
+  const categories = computed(() => catsStore.items ?? []);
+  const tags = computed(() => tagsStore.items ?? []);
 
-  function createForm() {
+  const initialValues = computed(() => {
+    const item = props.item;
     return {
-      price: props.item.price,
-      description: props.item.description,
-      img: null as File | null,
-      category: props.item.categoryId ? catsStore.getItem(props.item.categoryId) : null,
+      price: item.price.toString(),
+      description: item.description ?? '',
+      category: item.categoryId ? catsStore.getItem(item.categoryId) : null,
+      tags: item.tags
     }
-  }
+  });
 
-  const form = reactive(createForm());
-
-  function resetForm() {
-    Object.assign(form, createForm());
-  }
-
-  const requiredRule = (val: any) => !!val || 'Поле обязательно для заполнения';
-
-  const rules = {
-    price: [ requiredRule ],
-    category: [ requiredRule ],
-  };
-
-  async function submit() {
+  async function submit(form: Form) {
     const body = {
       price: +form.price,
       description: form.description,
@@ -106,26 +72,15 @@
     emit('update', body);
   }
 
-  function filterFn (val: any, update: any) {
-    const list = tagsStore.items ?? [];
-    if (val === '') {
-      update(() => {
-        tagsOpts.value = list;
-      });
-      return;
-    }
-
-    update(() => {
-      const needle = val.toLowerCase()
-      tagsOpts.value = list.filter(v => v.name.toLowerCase().indexOf(needle) > -1);
-    })
+  function addTags(tag: Tag) {
+    emit('add:tags', [ tag ]);
   }
 
-  function addTags(tags: Tag[]) {
-    emit('add:tags', tags);
+  function removeTag(tag: Tag) {
+    emit('remove:tags', [ tag ]);
   }
 
-  function removeTags(tags: Tag[]) {
+  function clearTags(tags: Tag[]) {
     emit('remove:tags', tags);
   }
 </script>

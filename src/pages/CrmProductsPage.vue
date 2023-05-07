@@ -34,10 +34,6 @@
 
   const { loadMore, products, create, creating, update, updateLocal, attachTags, dettachTags } = useProductsPags({ limit: 18 });
   useInfiniteLoading('#pag', () => loadMore({ withTags: '1' }));
-  // const sortedProducts = computed(() => {
-  //   if(products.value === null) return [];
-  //   return [...products.value].sort((p1, p2) => +p2.visible - +p1.visible);
-  // });
 
   function toogleCreate() {
     showCreate.value = !showCreate.value
