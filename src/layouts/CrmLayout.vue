@@ -26,18 +26,25 @@
         </q-item>
         <q-expansion-item icon="description" label="Отчеты" default-opened :content-inset-level="1">
           <q-list>
-            <q-item
+            <!-- <q-item
               clickable
               v-ripple
             >
               <q-item-section>Заказы</q-item-section>
-            </q-item>
+            </q-item> -->
             <q-item
               clickable
               v-ripple
               :to="{ name: 'crm.reports.products' }"
             >
               <q-item-section>Продукты</q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              v-ripple
+              :to="{ name: 'crm.reports.prices' }"
+            >
+              <q-item-section>Таблица цен</q-item-section>
             </q-item>
           </q-list>
         </q-expansion-item>
