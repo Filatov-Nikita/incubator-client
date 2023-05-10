@@ -1,24 +1,20 @@
 <template>
   <q-page class="tw-p-4 tw-pt-6">
     <div class="tw-border tw-border-black tw-max-w-3xl">
-      <div v-for="(dates, group) in productsList">
-        <div v-for="(prices, date) in dates">
-          <div
-            class="tw-border-b tw-border-black tw-p-2"
-            v-for="(products, price) in prices"
-          >
-            <div class="tw-flex tw-justify-between tw-mb-2">
-              <p class="tw-text-4xl tw-font-bold">{{ (groupsLabels as any)[group] }} -</p>
-              <p class="tw-text-4xl tw-font-bold">{{ $price(price) }}</p>
-            </div>
-            <div class="tw-flex tw-flex-wrap tw-space-x-2">
-              <p>({{ products[0].age }} суточный)</p>
-              <div v-for="product in products">
-                "{{ product.name }}"
-              </div>
-              <p>(от {{ date }})</p>
-            </div>
-          </div>
+      <div
+        v-for="item in flatList"
+        class="tw-border-b tw-border-black tw-p-2 last:tw-border-0"
+      >
+        <div class="tw-flex tw-justify-between tw-mb-2">
+          <p class="tw-text-4xl tw-font-bold">{{ item.group }} -</p>
+          <p class="tw-text-4xl tw-font-bold">{{ $price(item.price) }}</p>
+        </div>
+        <div class="tw-flex tw-flex-wrap">
+          <p>
+            ({{ item.age }} суточный)
+            {{ item.products }}
+            (от {{ item.date }})
+          </p>
         </div>
       </div>
     </div>
@@ -73,17 +69,65 @@
 
   const groupsLabels = {
     brojler: 'Бройлер',
-    kurochka: 'Курочка'
+    kurochka: 'Курочка',
+    petuh: 'Петушок',
+    nesushka: 'Несушка',
+    dominant: 'Доминант',
+    cvetBroiler: 'Цветной бройлер',
+    utka: 'Утенок',
+    utkaBroiler: 'Бройлерная утка',
+    mulard: 'Мулард',
+    gus: 'Гусь',
+    induk: 'Индюшата'
   }
 
   const groupsFilters = {
     brojler: [
       (name: string) => name.indexOf('кобб') !== -1,
       (name: string) => name.indexOf('росс') !== -1,
+      (name: string) => name.indexOf('арбор') !== -1,
+      (name: string) => name.indexOf('айкрес') !== -1,
     ],
     kurochka: [
       (name: string) => name.indexOf('ломан браун') !== -1,
     ],
+    petuh: [
+      (name: string) => name.indexOf('пету') !== -1,
+    ],
+    nesushka: [
+      (name: string) => name.indexOf('несушк') !== -1,
+    ],
+    dominant: [
+      (name: string) => name.indexOf('доминант') !== -1,
+    ],
+    cvetBroiler: [
+      (name: string) => name.indexOf('цветной бройлер') !== -1,
+      (name: string) => name.indexOf('голошейка') !== -1,
+      (name: string) => name.indexOf('мастер грей') !== -1,
+      (name: string) => name.indexOf('редбро') !== -1,
+    ],
+    utka: [
+      (name: string) => name.indexOf('цветная башкирская') !== -1,
+      (name: string) => name.indexOf('агидель') !== -1,
+      (name: string) => name.indexOf('фаворит') !== -1,
+    ],
+    utkaBroiler: [
+      (name: string) => name.indexOf('стар53') !== -1,
+      (name: string) => name.indexOf('ST-5') !== -1,
+    ],
+    mulard: [
+      (name: string) => name.indexOf('мулард') !== -1,
+    ],
+    gus: [
+      (name: string) => name.indexOf('Гусь') !== -1,
+      (name: string) => name.indexOf('итальянский белы') !== -1,
+      (name: string) => name.indexOf('крупно-серы') !== -1,
+      (name: string) => name.indexOf('линда') !== -1,
+    ],
+    induk: [
+      (name: string) => name.indexOf('биг-6') !== -1,
+      (name: string) => name.indexOf('бронзовые') !== -1,
+    ]
   }
 
   function makeProduct(product: Product) {
@@ -128,4 +172,23 @@
     return groups;
   });
 
+  const flatList = computed(() => {
+    const groups = productsList.value;
+    const list = [];
+    for(let group in groups) {
+      for(let date in groups[group]) {
+        for(let price in groups[group][date]) {
+          const products = groups[group][date][price];
+          list.push({
+            products: products.map((p: any) => `"${p.name}"`).join(', ') as string,
+            group: (groupsLabels as any)[group] as string,
+            price: +price,
+            age: products[0].age as number,
+            date
+          });
+        }
+      }
+    }
+    return list;
+  });
 </script>
