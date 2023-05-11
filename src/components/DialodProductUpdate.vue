@@ -67,7 +67,7 @@
     const body = {
       price: +form.price,
       description: form.description,
-      img: form.img ?? form.imgUrl,
+      img: form.img || form.imgUrl || null,
       categoryId: form.category?.id ?? null,
     };
 
