@@ -1,5 +1,8 @@
 <template>
   <q-page class="tw-p-4 tw-pt-6">
+    <div class="tw-mb-4 print">
+      <q-btn color="primary" outline icon="print" label="Печать" @click="print" />
+    </div>
     <div class="tw-border tw-border-black tw-max-w-3xl">
       <div
         v-for="item in flatList"
@@ -24,8 +27,18 @@
 <script setup lang="ts">
   import useProducts from 'src/composables/products-pags';
   import { useCategoriesStore } from 'src/stores/categories';
-  import { computed } from 'vue';
+  import { computed, onUnmounted } from 'vue';
   import { Product } from 'src/types/products';
+
+  document.body.classList.add('printable');
+
+  onUnmounted(() => {
+    document.body.classList.remove('printable');
+  });
+
+  function print() {
+    window.print();
+  }
 
   const catsStore = useCategoriesStore();
   const { products, loadMore } = useProducts({ limit: 1000 });
@@ -241,3 +254,14 @@
 
   const flatList = computed(() => getFlatProducts(productsList.value, groupsLabels));
 </script>
+<style>
+  @media print {
+    .printable .q-header, .printable .q-drawer-container, .printable .print {
+      display: none !important;
+    }
+
+    .printable .q-page-container {
+      padding: 0 !important;
+    }
+  }
+</style>
