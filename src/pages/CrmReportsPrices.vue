@@ -13,7 +13,7 @@
           <p>
             ({{ item.age }} суточный)
             {{ item.products }}
-            (от {{ item.date }})
+            (от {{ item.birthday }})
           </p>
         </div>
       </div>
@@ -26,8 +26,6 @@
   import { useCategoriesStore } from 'src/stores/categories';
   import { computed } from 'vue';
   import { Product } from 'src/types/products';
-
-  type ParsedProduct = Product & { birthday: string, cleanedName: string, age: number };
 
   const catsStore = useCategoriesStore();
   const { products, loadMore } = useProducts({ limit: 1000 });
@@ -67,6 +65,12 @@
     return Number(age[0].split(' ')[0]);
   }
 
+  function getProductName(name: string) {
+    const matched = name.match(/.+(?= [0-9]+ сут)/);
+    if(!matched) throw new Error('Имя не указано');
+    return matched[0];
+  }
+
   const groupsLabels = {
     brojler: 'Бройлер',
     kurochka: 'Курочка',
@@ -74,14 +78,17 @@
     nesushka: 'Несушка',
     dominant: 'Доминант',
     cvetBroiler: 'Цветной бройлер',
-    utka: 'Утенок',
+    utka: 'Утка',
     utkaBroiler: 'Бройлерная утка',
     mulard: 'Мулард',
     gus: 'Гусь',
     induk: 'Индюшата'
   }
 
-  const groupsFilters = {
+  type GroupFilter = (name: string) => boolean;
+  type Filters = { [ K: string ]: GroupFilter[] }
+
+  const groupsFilters: Filters = {
     brojler: [
       (name: string) => name.indexOf('кобб') !== -1,
       (name: string) => name.indexOf('росс') !== -1,
@@ -89,6 +96,7 @@
       (name: string) => name.indexOf('айкрес') !== -1,
     ],
     kurochka: [
+      (name: string) => name.indexOf('курочк') !== -1,
       (name: string) => name.indexOf('ломан браун') !== -1,
     ],
     petuh: [
@@ -107,57 +115,85 @@
       (name: string) => name.indexOf('редбро') !== -1,
     ],
     utka: [
+      (name: string) => /^утка/gi.test(name),
       (name: string) => name.indexOf('цветная башкирская') !== -1,
       (name: string) => name.indexOf('агидель') !== -1,
       (name: string) => name.indexOf('фаворит') !== -1,
     ],
     utkaBroiler: [
+      (name: string) => name.indexOf('бройлерная утка') !== -1,
       (name: string) => name.indexOf('стар53') !== -1,
-      (name: string) => name.indexOf('ST-5') !== -1,
+      (name: string) => name.indexOf('st 5') !== -1,
     ],
     mulard: [
       (name: string) => name.indexOf('мулард') !== -1,
     ],
     gus: [
-      (name: string) => name.indexOf('Гусь') !== -1,
+      (name: string) => name.indexOf('серы') !== -1,
+      (name: string) => name.indexOf('белы') !== -1,
       (name: string) => name.indexOf('итальянский белы') !== -1,
-      (name: string) => name.indexOf('крупно-серы') !== -1,
+      (name: string) => name.indexOf('крупно серы') !== -1,
       (name: string) => name.indexOf('линда') !== -1,
     ],
     induk: [
-      (name: string) => name.indexOf('биг-6') !== -1,
-      (name: string) => name.indexOf('бронзовые') !== -1,
+      (name: string) => name.indexOf('биг 6') !== -1,
+      (name: string) => name.indexOf('бронзов') !== -1,
     ]
   }
 
-  function makeProduct(product: Product) {
-    try {
-      const cleanedName = cleanName(product.name);
-      const age = getAge(cleanedName);
-      const birthday = prettyDate(getBirthday(age));
-      return {
-        ...product,
-        age,
-        cleanedName,
-        birthday,
-      }
-    } catch {
-      return null;
+  type PriceProduct = Pick<Product, 'name' | 'description' | 'price'> & {
+    cleanedName: string,
+    age: number,
+    birthday: string,
+    productName: string
+  };
+
+  function makeProduct(product: Product): PriceProduct {
+    const cleanedName = cleanName(product.name);
+    const productName = getProductName(cleanedName);
+    const age = getAge(cleanedName);
+    const birthday = prettyDate(getBirthday(age));
+    return {
+      age,
+      productName,
+      cleanedName,
+      birthday,
+      price: product.price,
+      description: product.description,
+      name: product.name,
     }
   }
 
-  const parsedProducts = computed(() => {
+  const priceProducts = computed(() => {
     if(products.value === null) return [];
-    return products.value.map(makeProduct).filter(p => p !== null) as ParsedProduct[];
+    const list: PriceProduct[] = [];
+
+    for(const product of products.value) {
+      try {
+        list.push(makeProduct(product));
+      } catch {
+        continue;
+      }
+    }
+
+    return list;
   });
 
-  const productsList = computed(() => {
-    const groups: any = {};
+  type GroupProducts = {
+    [ Group: string ]: {
+      [ Birthday: string ]: {
+        [ Price: string ]: PriceProduct[]
+      }
+    }
+  }
 
-    parsedProducts.value.forEach((product) => {
-      for(let key in groupsFilters) {
-        const filters = (groupsFilters as any)[key];
-        const res = filters.some((filter: any) => filter(product.cleanedName));
+  function getGroupProducts(products: PriceProduct[], groupsFilters: Filters): GroupProducts {
+    const groups: GroupProducts = {};
+
+    for(const product of products) {
+      for(const key in groupsFilters) {
+        const filters = groupsFilters[key];
+        const res = filters.some((filter) => filter(product.cleanedName));
 
         if(res) {
           if(!groups[key]) groups[key] = {};
@@ -167,28 +203,41 @@
           groups[key][product.birthday][product.price].push(product);
         }
       }
-    });
+    }
 
     return groups;
-  });
+  }
 
-  const flatList = computed(() => {
-    const groups = productsList.value;
-    const list = [];
+  const productsList = computed(() => getGroupProducts(priceProducts.value, groupsFilters));
+
+  interface FlatList {
+    products: string,
+    group: string,
+    birthday: string,
+    age: number,
+    price: number
+  }
+
+  function getFlatProducts(groups: GroupProducts, groupsLabels: Record<string, string>): FlatList[] {
+    const list: FlatList[] = [];
+
     for(let group in groups) {
-      for(let date in groups[group]) {
-        for(let price in groups[group][date]) {
-          const products = groups[group][date][price];
+      for(let birthday in groups[group]) {
+        for(let price in groups[group][birthday]) {
+          const products = groups[group][birthday][price];
           list.push({
-            products: products.map((p: any) => `"${p.name}"`).join(', ') as string,
-            group: (groupsLabels as any)[group] as string,
+            birthday,
             price: +price,
-            age: products[0].age as number,
-            date
+            group: groupsLabels[group],
+            age: products[0].age,
+            products: products.map(p => `"${p.productName}"`).join(', '),
           });
         }
       }
     }
+
     return list;
-  });
+  }
+
+  const flatList = computed(() => getFlatProducts(productsList.value, groupsLabels));
 </script>
