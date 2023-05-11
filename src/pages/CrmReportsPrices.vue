@@ -96,14 +96,14 @@
       (name: string) => name.indexOf('айкрес') !== -1,
     ],
     kurochka: [
-      (name: string) => name.indexOf('курочк') !== -1,
+      (name: string) => /^курочк(а|и)/i.test(name),
       (name: string) => name.indexOf('ломан браун') !== -1,
     ],
     petuh: [
-      (name: string) => name.indexOf('пету') !== -1,
+      (name: string) => /^пету(х|хи|шки|шок)/i.test(name)
     ],
     nesushka: [
-      (name: string) => name.indexOf('несушк') !== -1,
+      (name: string) => /^несушк(а|и)/i.test(name),
     ],
     dominant: [
       (name: string) => name.indexOf('доминант') !== -1,
@@ -115,29 +115,29 @@
       (name: string) => name.indexOf('редбро') !== -1,
     ],
     utka: [
-      (name: string) => /^утка/gi.test(name),
+      (name: string) => /^ут(ка|енок|ята)/i.test(name),
       (name: string) => name.indexOf('цветная башкирская') !== -1,
       (name: string) => name.indexOf('агидель') !== -1,
       (name: string) => name.indexOf('фаворит') !== -1,
     ],
     utkaBroiler: [
       (name: string) => name.indexOf('бройлерная утка') !== -1,
-      (name: string) => name.indexOf('стар53') !== -1,
-      (name: string) => name.indexOf('st 5') !== -1,
+      (name: string) => /стар\s?53/i.test(name),
+      (name: string) => /st\s?5/i.test(name),
     ],
     mulard: [
       (name: string) => name.indexOf('мулард') !== -1,
     ],
     gus: [
-      (name: string) => name.indexOf('серы') !== -1,
-      (name: string) => name.indexOf('белы') !== -1,
-      (name: string) => name.indexOf('итальянский белы') !== -1,
-      (name: string) => name.indexOf('крупно серы') !== -1,
+      (name: string) => /серы(й|е)/i.test(name),
+      (name: string) => /белы(й|е)/i.test(name),
+      (name: string) => /итальянски(й|е) белы(й|е)/i.test(name),
+      (name: string) => /крупно(й|е) серы(й|е)/i.test(name),
       (name: string) => name.indexOf('линда') !== -1,
     ],
     induk: [
-      (name: string) => name.indexOf('биг 6') !== -1,
-      (name: string) => name.indexOf('бронзов') !== -1,
+      (name: string) => /биг\s?6/i.test(name),
+      (name: string) => /^бронзовы(й|е)/i.test(name),
     ]
   }
 
