@@ -12,13 +12,19 @@ export default (opts: Opts) => {
   const { create, update, attachTags, dettachTags, products, loading, creating, updateLocal } = useProducts();
   const { fetchList, reset } = usePagination({ limit: opts.limit });
 
+  const loadedIds: Record<string, boolean> = {};
+
   const loadMore = fetchList(async (res, opts, filter: ProductFilter) => {
     try {
       loading.value = true;
       const { meta, data } = await store.list({...filter, ...opts});
 
       if(!products.value) products.value = [];
-      products.value = [ ...products.value, ...data ];
+
+      const list = data.filter(p => !loadedIds[p.id]);
+      list.forEach(p => loadedIds[p.id] = true);
+
+      products.value = [...products.value, ...list];
 
       res(meta);
 
