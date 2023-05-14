@@ -145,7 +145,7 @@
       (name: string) => /серы(й|е)/i.test(name),
       (name: string) => /белы(й|е)/i.test(name),
       (name: string) => /итальянски(й|е) белы(й|е)/i.test(name),
-      (name: string) => /крупно(й|е) серы(й|е)/i.test(name),
+      (name: string) => /крупно серы(й|е)/i.test(name),
       (name: string) => name.indexOf('линда') !== -1,
     ],
     induk: [
