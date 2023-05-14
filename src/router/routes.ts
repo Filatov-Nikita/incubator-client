@@ -18,6 +18,7 @@ const routes: RouteRecordRaw[] = [
       { path: 'tags', component: () => import('src/pages/CrmTagsPage.vue'), name: 'crm.tags' },
       { path: 'reports/products', component: () => import('src/pages/CrmReportsProducts.vue'), name: 'crm.reports.products' },
       { path: 'reports/prices', component: () => import('src/pages/CrmReportsPrices.vue'), name: 'crm.reports.prices' },
+      { path: 'reports/orders', component: () => import('src/pages/CrmReportsOrders.vue'), name: 'crm.reports.orders' },
     ],
   },
   {

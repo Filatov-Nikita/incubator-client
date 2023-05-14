@@ -22,3 +22,28 @@ interface BodyOne {
 export interface OrderBody {
   products: BodyOne[]
 }
+
+type OrderListProduct = {
+  total: number,
+  id: number,
+  count: number,
+  price: number
+  name: string
+}
+
+export interface OrderListItem {
+  products: OrderListProduct[],
+  total: number,
+  createdAt: string,
+  userId: number,
+  id: number,
+}
+
+export interface OrderList {
+  orders: OrderListItem[]
+}
+
+export interface OrderFilter {
+  dateFrom?: string,
+  dateTo?: string,
+}
