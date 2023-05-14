@@ -1,5 +1,5 @@
 <template>
-  <q-table :columns="columns" :rows="ordersList" row-key="id" hide-pagination>
+  <q-table :columns="columns" :rows="ordersList" row-key="id" hide-pagination :rows-per-page-options="rowsPerPage">
     <template #body="props">
       <q-tr :props="props" @click="onClick(props.row)">
         <q-td key="id" :props="props">{{ props.row.id }}</q-td>
@@ -18,6 +18,8 @@
   import { QTableProps } from 'quasar';
   import { ref, computed } from 'vue';
   import CardOrderDetails from './CardOrderDetails.vue';
+
+  const rowsPerPage = [0];
 
   const props = defineProps<{
     orders: OrderList['orders']
