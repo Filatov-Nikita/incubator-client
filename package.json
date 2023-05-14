@@ -2,7 +2,7 @@
   "name": "incubator",
   "version": "1.0.0",
   "description": "Для продажи продуктов инкубатора",
-  "productName": "incubator",
+  "productName": "Инкубатор - продавец",
   "author": "Nikita Antonov <nikita45454@gmail.com>",
   "private": true,
   "scripts": {
