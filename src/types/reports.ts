@@ -10,5 +10,6 @@ export interface ProductItem {
 
 export interface Report {
   products: ProductItem[],
-  total: number
+  total: number,
+  totalCount: number
 }

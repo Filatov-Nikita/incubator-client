@@ -55,7 +55,16 @@
       </q-card>
     </section>
 
-    <div class="tw-mb-4 tw-font-bold tw-text-xl" v-if="data">Выручка: {{ $price(data?.total) }}</div>
+    <div class="tw-mb-2 tw-font-bold tw-text-xl" v-if="data">
+      Выручка: {{ $price(data?.total) }}
+    </div>
+    <div class="tw-mb-4 tw-font-medium tw-text-md" v-if="data">
+      Продано всего:
+      <span class="tw-font-bold tw-text-lg text-primary">
+        {{ $prettyNumber(data?.totalCount) }} (шт)
+      </span>
+    </div>
+
     <q-table
       v-if="data"
       :columns="columns"
@@ -76,15 +85,16 @@
   import type { Category } from 'src/types/categories';
   import { useCategoriesStore } from 'src/stores/categories';
 
+  const [ today ] = new Date().toISOString().split('T');
+
   const store = useReportsStore();
   const catsStore = useCategoriesStore();
   const data = ref<Report | null>(null);
-  const showFilter = ref(true);
   const inst = getCurrentInstance();
   const cat = ref<Category | null>(null);
   const filter = reactive({
-    dateFrom: '',
-    dateTo: '',
+    dateFrom: today,
+    dateTo: today,
   });
 
   function pagLabel(firstRowIndex: number, endRowIndex: number, totalRowsNumber: number) {
