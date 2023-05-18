@@ -23,12 +23,11 @@ export default boot(async ({ router }) => {
         tagsStore.list()
       ]);
 
-      return next();
-
     } catch(e) {
       Notify.create({ type: 'negative', message: 'Не удалось загрузить данные' });
     } finally {
       Loading.hide();
+      next();
     }
   });
 
