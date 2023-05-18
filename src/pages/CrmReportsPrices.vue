@@ -1,7 +1,9 @@
 <template>
   <q-page class="tw-p-4 tw-pt-6">
-    <div class="tw-mb-4 print">
+    <div class="tw-mb-4 print tw-space-x-4">
       <q-btn color="primary" outline icon="print" label="Печать" @click="print" />
+      <q-btn color="orange" outline icon="today" label="Сегодня" @click="setToday" />
+      <q-btn color="purple" outline icon="calendar_today" label="+ 1 день" @click="setTomorrow" />
     </div>
     <div class="tw-border tw-border-black tw-max-w-3xl">
       <div
@@ -27,10 +29,22 @@
 <script setup lang="ts">
   import useProducts from 'src/composables/products-pags';
   import { useCategoriesStore } from 'src/stores/categories';
-  import { computed, onUnmounted } from 'vue';
+  import { computed, onUnmounted, ref } from 'vue';
   import { Product } from 'src/types/products';
 
   document.body.classList.add('printable');
+
+  const now = ref(new Date());
+
+  function setTomorrow() {
+    const dt = new Date(now.value);
+    dt.setDate(dt.getDate() + 1);
+    now.value = dt;
+  }
+
+  function setToday() {
+    now.value = new Date();
+  }
 
   onUnmounted(() => {
     document.body.classList.remove('printable');
@@ -54,8 +68,8 @@
 
   loadMore({ categoryId: cat.value?.id, visible: true });
 
-  function getBirthday(days: number) {
-    const now = new Date();
+  function getBirthday(days: number, now?: Date) {
+    now = now ?? new Date();
     now.setDate(now.getDate() - (days - 1));
     return now;
   }
@@ -165,7 +179,7 @@
     const cleanedName = cleanName(product.name);
     const productName = getProductName(cleanedName);
     const age = getAge(cleanedName);
-    const birthday = prettyDate(getBirthday(age));
+    const birthday = prettyDate(getBirthday(age, new Date(now.value)));
     return {
       age,
       productName,
@@ -249,7 +263,7 @@
       }
     }
 
-    return list;
+    return list.sort((a, b) => a.age - b.age);
   }
 
   const flatList = computed(() => getFlatProducts(productsList.value, groupsLabels));
