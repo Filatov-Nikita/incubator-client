@@ -124,7 +124,7 @@
     ],
     kurochka: [
       (name: string) => /^курочк(а|и)/i.test(name),
-      (name: string) => name.indexOf('ломан браун') !== -1,
+      (name: string) => /^ломан браун/i.test(name),
     ],
     petuh: [
       (name: string) => /^пету(х|хи|шки|шок)/i.test(name)
@@ -164,7 +164,7 @@
     ],
     induk: [
       (name: string) => /биг\s?6/i.test(name),
-      (name: string) => /^бронзовы(й|е)/i.test(name),
+      (name: string) => /бронзовы(й|е)/i.test(name),
     ]
   }
 
