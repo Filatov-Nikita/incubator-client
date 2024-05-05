@@ -15,6 +15,7 @@ export function list(filter: ProductLazyFilter = {}) {
   if(filter.offset) searchParams.append('offset', filter.offset.toString());
   if(filter.visible) searchParams.append('visible', filter.visible ? '1' : '0');
   if(filter.withTags) searchParams.append('withTags', '');
+  if(filter.search) searchParams.append('search', filter.search);
 
   return api.get('products', { searchParams }).json<ProductsResponse>();
 }

@@ -16,6 +16,7 @@ export type ProductFilter = {
   visible?: boolean,
   withTags?: '1',
   tags?: number[],
+  search?: string,
 }
 
 export type LazyLoadFilter = {
