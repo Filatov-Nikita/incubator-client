@@ -10,7 +10,7 @@ interface Opts {
 export default (opts: Opts) => {
   const store = useProductsStore();
   const { create, update, attachTags, dettachTags, products, loading, creating, updateLocal } = useProducts();
-  const { fetchList, reset } = usePagination({ limit: opts.limit });
+  const { fetchList, reset: resetPag } = usePagination({ limit: opts.limit });
 
   const loadedIds: Record<string, boolean> = {};
 
@@ -50,6 +50,13 @@ export default (opts: Opts) => {
       loading.value = false;
     }
   });
+
+  function reset() {
+    resetPag();
+    for(let key in loadedIds) {
+      delete loadedIds[key];
+    };
+  }
 
   return {
     products,
